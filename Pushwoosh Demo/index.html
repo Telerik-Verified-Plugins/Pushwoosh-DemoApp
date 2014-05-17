@@ -48,30 +48,33 @@
         data-model="app.demoService.viewModel">
 
         <div class="demo">
-            <h3>TODO</h3>
+            <!--h3>TODO</h3-->
             <p>
-                The device registers itself on the Pushwoosh server automatically using a device specific push key.
+                First have the device registers itself with the Pushwoosh server using a device specific hardware id.
             </p>
-            <!--p>
-                <button data-role="button" class="button" data-bind="click: togglePushKey">Show/Hide Push Key</button>
-            </p-->
             <p>
-                TODO: maybe add toggles for geo tracking, LED, whatever..
-            </p>
-            <!--p class="pushKey" id="pushKeyWrapper">
-                <textarea rows="6" id="pushKey"></textarea>
-            </p-->
-            <p>
-                <button data-role="button" class="button" data-bind="click: getPushToken">Get push token</button>
+                <button data-role="button" class="button" data-bind="click: registerDevice">Register device</button>
             </p>
             <p>
                 <button data-role="button" class="button" data-bind="click: getPushwooshHWID">Get Pushwoosh HW ID</button>
             </p>
             <p>
-                <button data-role="button" class="button" data-bind="click: setTags">Set Tags (TODO, which?)</button>
+                <br/>Now we can inspect the push token we received.
+            </p>
+            <p>
+                <button data-role="button" class="button" data-bind="click: getPushToken">Get push token</button>
+            </p>
+            <p>
+                <br/>Unregister the device for testing purposes.
             </p>
             <p>
                 <button data-role="button" class="button" data-bind="click: unregisterDevice">Unregister device</button>
+            </p>
+            <p>
+                <br/>TODO: geo tracking, LED, ..
+            </p>
+            <p>
+                <button data-role="button" class="button" data-bind="click: setTags">Set Tags (TODO, which?)</button>
             </p>
 		</div>
     </div>

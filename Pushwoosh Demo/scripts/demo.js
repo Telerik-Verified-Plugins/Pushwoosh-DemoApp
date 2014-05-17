@@ -8,12 +8,18 @@
 
     DemoViewModel = kendo.data.ObservableObject.extend({
 
-        /*
-        togglePushKey: function () {
-            document.getElementById('pushKeyWrapper').style.display =
-                document.getElementById('pushKeyWrapper').style.display == 'block' ? 'none' : 'block';
+        // Added a seperate method for sake of demo, but you could call this immediately after pushNotification.onDeviceReady
+        registerDevice: function () {
+            window.plugins.pushNotification.registerDevice(
+                function (result) {
+                    // not all platforms agree on the result type
+                    var token = typeof result === 'string' ? result : result['deviceToken'];
+                    navigator.notification.alert(token, null, 'Device registered', 'Close');
+                },
+                function (status) {
+                    navigator.notification.alert(JSON.stringify(['failed to register ', status]));
+                });
         },
-        */
         
         unregisterDevice: function () {
             window.plugins.pushNotification.unregisterDevice(this.onSuccess, this.onError);
@@ -66,15 +72,6 @@ function registerPushwooshWP8() {
     
 	//initialize the plugin
     pushNotification.onDeviceReady({appid:"F9408-29446"});
- 
-    //register for pushes
-	pushNotification.registerDevice(
-    	  function (token) {
-              console.log('Push token: ' + token);
-	      },
-    	  function (status) {
-              navigator.notification.alert(JSON.stringify(['failed to register ', status]));
-          });
 }
 
 /*
@@ -119,21 +116,11 @@ function registerPushwooshIOS() {
 
   //initialize the plugin
   pushNotification.onDeviceReady({pw_appid:"F9408-29446"});
-   
-  // change pw_appid (Pushwoosh App ID) and appname
-  pushNotification.registerDevice(
-      function (status) {
-        var deviceToken = status['deviceToken'];
-        console.log('Push token: ' + deviceToken);
-      },
-      function (status) {
-        console.warn('failed to register : ' + JSON.stringify(status));
-        navigator.notification.alert(JSON.stringify(['failed to register ', status]));
-      });
 
   // reset (hide) badges on start by setting it to 0
   pushNotification.setApplicationIconBadgeNumber(0);
 }
+
 /*
 function onPushwooshiOSInitialized(pushToken) {
   var pushNotification = window.plugins.pushNotification;
@@ -175,16 +162,6 @@ function registerPushwooshAndroid() {
 
   //initialize Pushwoosh with projectid: "GOOGLE_PROJECT_ID", appid : "PUSHWOOSH_APP_ID". This will trigger all pending push notifications on start.
   pushNotification.onDeviceReady({ projectid: "15978248288", appid : "F9408-29446" });
-
-  //register for pushes
-  pushNotification.registerDevice(
-      function (token) {
-        console.log('Push token: ' + token);
-      },
-      function (status) {
-        alert("failed to register: " + status);
-        console.warn(JSON.stringify(['failed to register ', status]));
-      });
 }
 
 /*
