@@ -30,10 +30,11 @@
         </div>
         <h3>Pushwoosh Plugin Demo</h3>
         <p>
-            The Pushwoosh plugin allows you to receive push messages from the Pushwoosh platform.
+            The Pushwoosh plugin allows you to receive push notifications sent by the Pushwoosh platform.
         </p>
         <p>
-            TODO..
+            Depending on the platform you can do various cool things.
+            This demo app gets you up and running quickly - for advanced usage take a look at the documentation at pushwoosh.com.
         </p>
         <p>
             Custom plugins don't work in the simulator and the AppBuilder companion app,
@@ -48,18 +49,14 @@
         data-model="app.demoService.viewModel">
 
         <div class="demo">
-            <!--h3>TODO</h3-->
             <p>
-                First have the device registers itself with the Pushwoosh server using a device specific hardware id.
+                After you've changed the configuration in scripts/demo.js, you can have the device register itself with the Pushwoosh server.
             </p>
             <p>
                 <button data-role="button" class="button" data-bind="click: registerDevice">Register device</button>
             </p>
             <p>
-                <button data-role="button" class="button" data-bind="click: getPushwooshHWID">Get Pushwoosh HW ID</button>
-            </p>
-            <p>
-                <br/>Now we can inspect the push token we received.
+                <br/>We can always inspect the push token we received.
             </p>
             <p>
                 <button data-role="button" class="button" data-bind="click: getPushToken">Get push token</button>
@@ -71,10 +68,18 @@
                 <button data-role="button" class="button" data-bind="click: unregisterDevice">Unregister device</button>
             </p>
             <p>
-                <br/>TODO: geo tracking, LED, ..
+                <br/>Enable 'Geozones' in your Pushwoosh account to be able to use these methods.
             </p>
             <p>
-                <button data-role="button" class="button" data-bind="click: setTags">Set Tags (TODO, which?)</button>
+                <button data-role="button" class="button" data-bind="click: startLocationTracking">Start location tracking</button>
+            </p>
+            <p>
+                <button data-role="button" class="button" data-bind="click: stopLocationTracking">Stop location tracking</button>
+            </p>
+            <p>
+                The fun part is actually sending messages from Pushwoosh to this device.
+                Try sending a message while this app is in the foreground, background or when the device is locked.
+                <strong>Happy pushing!</strong>
             </p>
 		</div>
     </div>
