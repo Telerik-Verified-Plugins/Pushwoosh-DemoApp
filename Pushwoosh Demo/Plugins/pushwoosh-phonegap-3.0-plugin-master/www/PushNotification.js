@@ -71,6 +71,16 @@ PushNotification.prototype.clearLocalNotification = function() {
 	exec(null, null, "PushNotification", "clearLocalNotification", []);
 };
 
+//advanced background task to track device position and not drain the battery
+//deprecated, use startLocationTracking and stopLocationTracking
+PushNotification.prototype.startGeoPushes = function(success, fail) {
+	exec(success, fail, "PushNotification", "startGeoPushes", []);
+};
+
+PushNotification.prototype.stopGeoPushes = function(success, fail) {
+	exec(success, fail, "PushNotification", "stopGeoPushes", []);
+};
+
 //sets multi notification mode on
 PushNotification.prototype.setMultiNotificationMode = function(success, fail) {
 	exec(success, fail, "PushNotification", "setMultiNotificationMode", []);

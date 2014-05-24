@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     id="com.pushwoosh.plugins.pushwoosh"
-    version="3.1.0">
+    version="3.2.0">
 
     <name>Pushwoosh</name>
 
@@ -16,10 +16,10 @@
     <license>MIT</license>
 
     <js-module src="www/PushNotification.js" name="PushNotification">
-        <clobbers target="plugins.pushNotification" />
-    </js-module>
+          <clobbers target="plugins.pushNotification" />
+      </js-module>
 
-    <!-- android -->
+      <!-- android -->
     <platform name="android">
 
       <config-file>

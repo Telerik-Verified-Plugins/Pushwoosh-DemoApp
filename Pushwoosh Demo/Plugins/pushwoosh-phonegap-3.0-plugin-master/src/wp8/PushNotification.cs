@@ -5,89 +5,131 @@ using System.Collections.Generic;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using PushSDK;
-using PushSDK.Classes;
 using WPCordovaClassLib.Cordova;
 using WPCordovaClassLib.Cordova.JSON;
 using System.Runtime.Serialization;
+using System.Threading;
+using Newtonsoft.Json.Linq;
 
 namespace WPCordovaClassLib.Cordova.Commands
 {
     public class PushNotification : BaseCommand
     {
         private String appid;
+        private String authenticatedServiceName = null;
         private NotificationService service = null;
+        volatile private bool deviceReady = false;
 
+        //Phonegap runs all plugins methods on a separate threads, make sure onDeviceReady goes first
+        void waitDeviceReady()
+        {
+            while (!deviceReady)
+                Thread.Sleep(10);
+        }
 
         public void onDeviceReady(string options)
         {
             string[] args = JSON.JsonHelper.Deserialize<string[]>(options);
             PushOptions pushOptions = JSON.JsonHelper.Deserialize<PushOptions>(args[0]);
             this.appid = pushOptions.AppID;
+            authenticatedServiceName = pushOptions.ServiceName;
+
+            service = NotificationService.GetCurrent(appid, authenticatedServiceName, null);
+            service.OnPushTokenReceived += OnPushTokenReceived;
+            service.OnPushTokenFailed += OnPushTokenFailed;
+            service.OnPushAccepted += ExecutePushNotificationCallback;
+
+            deviceReady = true;
         }
+
+        private void OnPushTokenReceived(object sender, string token)
+        {
+            DispatchCommandResult(new PluginResult(PluginResult.Status.OK, token));
+        }
+
+        private void OnPushTokenFailed(object sender, string error)
+            {
+            DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, error));
+            }
 
         public void registerDevice(string options)
         {
-            service = NotificationService.GetCurrent(appid, null, null);
-            service.SubscribeToPushService();
-            service.OnPushAccepted += (sender, args) => DispatchCommandResult(new PluginResult(PluginResult.Status.OK, args.Result));
-
-            if (!string.IsNullOrEmpty(service.LastPushContent))
+            waitDeviceReady();
+            service.SubscribeToPushService(authenticatedServiceName);
+            if (string.IsNullOrEmpty(service.PushToken))
             {
-                this.ExecuteCallback(service.LastPushContent);
+                PluginResult plugResult = new PluginResult(PluginResult.Status.NO_RESULT);
+                plugResult.KeepCallback = true;
+                DispatchCommandResult(plugResult);
             }
-
+            else
+            {
             DispatchCommandResult(new PluginResult(PluginResult.Status.OK, service.PushToken));
+        }
         }
 
         public void unregisterDevice(string options)
         {
+            waitDeviceReady();
             service.UnsubscribeFromPushes();
             DispatchCommandResult(new PluginResult(PluginResult.Status.OK, "Unregistered from pushes"));
         }
 
+        public void getPushwooshHWID(string options)
+        {
+            waitDeviceReady();
+            DispatchCommandResult(new PluginResult(PluginResult.Status.OK, service.DeviceUniqueID));
+        }
 
         public void getPushToken(string options)
         {
-            if (!string.IsNullOrEmpty(service.PushToken))
+            waitDeviceReady();
+            if (service != null && !string.IsNullOrEmpty(service.PushToken))
             {
                 DispatchCommandResult(new PluginResult(PluginResult.Status.OK, service.PushToken));
             }
-            service.OnPushTokenUpdated += OnPushTokenUpdated;
         }
-
-        private void OnPushTokenUpdated(object sender, CustomEventArgs<Uri> e)
-        {
-            DispatchCommandResult(new PluginResult(PluginResult.Status.OK, e.Result.ToString()));
-        }
-
-
-        public void GetUserData(string options)
-        {
-            DispatchCommandResult(new PluginResult(PluginResult.Status.OK, service.UserData));
-        }
-
 
         public void setTags(string options)
         {
+            waitDeviceReady();
             string[] opts = JSON.JsonHelper.Deserialize<string[]>(options);
-            service.Tags.OnSendingComplete += (sender, args) => DispatchCommandResult(new PluginResult(PluginResult.Status.OK, JsonHelper.Serialize(args.Result)));
-            service.Tags.SendRequest(opts[0]);
+
+            JObject jsonObject = JObject.Parse(opts[0]);
+
+            List<KeyValuePair<string, object>> tags = new List<KeyValuePair<string, object>>();
+            foreach (var element in jsonObject)
+        {
+                tags.Add(new KeyValuePair<string,object>(element.Key, element.Value));
         }
 
+            service.SendTag(tags,
+                (obj, args) =>
+        {
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK, JsonHelper.Serialize(args)));
+                },
+                (obj, args) => 
+                {
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, JsonHelper.Serialize(args)));
+                }
+            );
+        }
 
         public void startLocationTracking(string options)
         {
-            service.GeoZone.Start();
+            waitDeviceReady();
+            service.StartGeoLocation();
             DispatchCommandResult(new PluginResult(PluginResult.Status.OK, "GeoZone service is started"));
         }
 
         public void stopLocationTracking(string options)
         {
-            service.GeoZone.Stop();
+            waitDeviceReady();
+            service.StopGeoLocation();
             DispatchCommandResult(new PluginResult(PluginResult.Status.OK, "GeoZone service is stopped"));
         }
 
-        void ExecuteCallback(string callbackResult)
+        void ExecutePushNotificationCallback(object sender, string pushPayload)
         {
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
@@ -103,7 +145,7 @@ namespace WPCordovaClassLib.Cordova.Commands
                     {
                         try
                         {
-                            cView.Browser.InvokeScript("execScript", "window.plugins.pushNotification.notificationCallback(" + callbackResult + ")");
+                            cView.Browser.InvokeScript("execScript", "window.plugins.pushNotification.notificationCallback(" + pushPayload + ")");
                         }
                         catch (Exception ex)
                         {
@@ -125,7 +167,9 @@ namespace WPCordovaClassLib.Cordova.Commands
         {
             [DataMember(Name = "appid", IsRequired = true)]
             public string AppID { get; set; }
-        }
 
+            [DataMember(Name = "serviceName", IsRequired = false)]
+            public string ServiceName { get; set; }
+        }
     }
 }

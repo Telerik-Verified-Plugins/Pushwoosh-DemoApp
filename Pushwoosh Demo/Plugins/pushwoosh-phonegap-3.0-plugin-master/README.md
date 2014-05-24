@@ -19,6 +19,10 @@ http://www.pushwoosh.com/programming-push-notification/windows-phone/wp-addition
 ## Acknowledgments
 Plugman support by Platogo
 
+HUGE thanks to Eddy Verbruggen for all the help with WP8 Phonegap support!!!
+https://github.com/EddyVerbruggen
+
+
 ## LICENSE
 
 	The MIT License
