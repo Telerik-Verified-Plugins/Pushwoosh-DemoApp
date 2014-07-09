@@ -133,7 +133,7 @@ function initPushwoosh() {
         alert('Plugin not available. Are you running in the simulator?');
         return;
     };
-    
+
     switch (device.platform) {
         case "Android":
 			initPushwooshAndroid();
