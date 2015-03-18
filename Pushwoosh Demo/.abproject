@@ -4,7 +4,7 @@
   "AppIdentifier": "com.telerik.plugindemo.pushwoosh",
   "ProjectName": "Pushwoosh Demo",
   "IsRunnable": "true",
-  "FrameworkVersion": "3.5.0",
+  "FrameworkVersion": "3.7.0",
   "AndroidPermissions": [
     "android.permission.CAMERA",
     "android.permission.VIBRATE",
@@ -52,5 +52,10 @@
   "WP8Capabilities": [
     "ID_CAP_PUSH_NOTIFICATION"
   ],
-  "Framework": "Cordova"
+  "Framework": "Cordova",
+  "projectVersion": "1",
+  "WP8WindowsPublisherName": "CN=Telerik",
+  "WP8PackageIdentityName": "1234Telerik.com.telerik.plugindemo.pushwoosh",
+  "WP8PublisherID": "{f224341d-05a0-45dd-bd2c-4e387abe3d72}",
+  "WP8ProductID": "{707f74d4-90f8-4d37-967c-463d2c050e54}"
 }
