@@ -26,6 +26,7 @@
     "android.permission.BROADCAST_STICKY"
   ],
   "CorePlugins": [
+    "com.pushwoosh.plugins.pushwoosh@3.6.16.1",
     "cordova-plugin-console",
     "cordova-plugin-crosswalk-webview@1.2.0",
     "cordova-plugin-device",
@@ -33,8 +34,7 @@
     "cordova-plugin-geolocation",
     "cordova-plugin-network-information",
     "cordova-plugin-splashscreen",
-    "cordova-plugin-statusbar",
-    "com.pushwoosh.plugins.pushwoosh@3.4.13"
+    "cordova-plugin-statusbar"
   ],
   "DeviceOrientations": [
     "Portrait",
