@@ -26,9 +26,8 @@
     "android.permission.BROADCAST_STICKY"
   ],
   "CorePlugins": [
-    "com.pushwoosh.plugins.pushwoosh@3.6.16.1",
+    "com.pushwoosh.plugins.pushwoosh@5.0.3.1",
     "cordova-plugin-console",
-    "cordova-plugin-crosswalk-webview@1.2.0",
     "cordova-plugin-device",
     "cordova-plugin-dialogs",
     "cordova-plugin-geolocation",
@@ -59,5 +58,6 @@
   "WP8WindowsPublisherName": "CN=Telerik",
   "WP8PackageIdentityName": "1234Telerik.com.telerik.plugindemo.pushwoosh",
   "WP8PublisherID": "{f224341d-05a0-45dd-bd2c-4e387abe3d72}",
-  "WP8ProductID": "{707f74d4-90f8-4d37-967c-463d2c050e54}"
+  "WP8ProductID": "{707f74d4-90f8-4d37-967c-463d2c050e54}",
+  "AndroidVersionCode": "1"
 }
