@@ -26,14 +26,14 @@
     "android.permission.BROADCAST_STICKY"
   ],
   "CorePlugins": [
-    "com.pushwoosh.plugins.pushwoosh@5.0.3.1",
     "cordova-plugin-console",
     "cordova-plugin-device",
     "cordova-plugin-dialogs",
     "cordova-plugin-geolocation",
     "cordova-plugin-network-information",
     "cordova-plugin-splashscreen",
-    "cordova-plugin-statusbar"
+    "cordova-plugin-statusbar",
+    "com.pushwoosh.plugins.pushwoosh@6.0.0"
   ],
   "DeviceOrientations": [
     "Portrait",
@@ -46,7 +46,7 @@
     "ID_RESOLUTION_WXGA",
     "ID_RESOLUTION_HD720P"
   ],
-  "BundleVersion": "1.0",
+  "BundleVersion": "1.0.1",
   "Description": "Pushwoosh Demo",
   "Author": "Telerik",
   "DisplayName": "Pushwoosh plugin demo",
